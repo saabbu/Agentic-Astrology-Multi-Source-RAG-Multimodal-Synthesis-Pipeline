@@ -1,0 +1,19 @@
+# YouTube Scraper & Data Handling
+google-api-python-client==2.196.0
+youtube-transcript-api==1.2.4
+pandas==3.0.2
+
+# LLM & API Integration (HeyGen, Ollama)
+requests==2.33.1
+
+# Speech Synthesis (Google Cloud & gTTS)
+google-cloud-texttospeech==2.36.0
+gTTS==2.5.4
+
+# Audio Processing
+pydub==0.25.1
+
+# Infrastructure & Utilities
+google-auth==2.52.0
+python-dateutil==2.9.0.post0
+

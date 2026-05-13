@@ -1,0 +1,83 @@
+
+# --- YouTube API Configuration ---
+# Used in: runYTTranscript.py
+yt_google_api_key = "YOUR APIKEY"
+yt_query = "(Guru Peyarchi | குரு பெயர்ச்சி) 2026 (Thulam | துலாம்)"
+transcript_length = 500
+date_time_lookout = 60
+language = ['ta']
+max_results = 10
+cookie_file_path = "youtube_cookies.txt"
+# --- Webshare Proxy Configuration ---
+# Used in: runYTTranscript.py
+webshare_proxy_user_name = 'NOT USED'
+webshare_proxy_password = 'NOT USED'
+
+
+# --- HeyGen API Configuration ---
+# Used in: getavtarVideo.py
+heygen_api_key = "YOUR_HEYGEN_API_KEY"
+
+
+# --- Google Cloud TTS Configuration ---
+# Used in: getAudioCloud.py
+# Note: Ensure the 'google-tts-creds.json' file is in your project root
+google_application_credentials = "google-tts-creds.json"
+
+# --- Optional: Ollama/LLM Settings ---
+# Used in: getGemmaSummary.py
+ollama_url = "http://localhost:11434/api/generate"
+model_name = "gemma3:12b"
+options = {
+            "num_ctx": 16384,
+            "temperature": 0.8,  
+            "top_p": 0.9,
+            "presence_penalty": 0.6 
+            
+        }
+
+rasi = "Thulam (துலாம்)"
+transit = "Guru Peyarchi (குரு பெயர்ச்சி)"
+greeting = "இனிய துலாம் ராசி அன்பர்களே!"
+
+map_prompt = """Role: You are a professional Vedic Astrologer.
+Task: Extract every specific prediction and piece of advice for {rasi} during the {transit} from the provided transcript.
+
+Constraint: Do not provide a summary of the video. Do not use phrases like "The speaker says" or "The transcript mentions." Provide the output as direct astrological predictions.
+
+Structure the output into these categories:
+Job (உத்தியோகம்)
+Business (தொழில்)
+Health (ஆரோக்கியம்)
+Love (காதல்)
+Marriage (திருமணம்)
+Parents Health (பெற்றோர் ஆரோக்கியம்)
+Kids Education (குழந்தைகள் கல்வி)
+Remedies (பரிகாரங்கள்)
+
+Transcript: {transcript}
+"""
+
+reduce_prompt = """Role: You are a traditional and highly respected Tamil Astrologer speaking directly to your devotees.
+Task: Synthesize the provided forecast summaries into a single, cohesive, and authoritative {transit} narrative for {rasi}.
+
+Language Constraint: You must write the ENTIRE response in high-quality, narrative Tamil.
+DIRECT ADDRESS: Start the response immediately with "{greeting}".
+
+Summaries to Synthesize:
+{combined_summaries}
+"""
+        
+
+# confidential.py additions
+ffmpeg_path = r'Path to ffmpeg/bin'
+narration_lead_audio = "path_to_narration_file.mp3"
+background_music_audio = "path_to_background_music.mp3"
+final_output_file = "astrology_final_mix.mp3"
+
+# Volume adjustment in dB (e.g., -20 means reducing background volume significantly)
+bg_music_volume_db = -20
+
+
+
+

@@ -1,0 +1,24 @@
+# Security
+confidential.py
+google-tts-creds.json
+youtube_cookies.txt
+
+# Virtual Environment (CRITICAL: Ignore the library folder)
+getYTTranscriptLib/
+venv/
+.venv/
+__pycache__/
+
+# Media & Data
+*.mp3
+*.wav
+*.png
+*.jpg
+*.mp4
+*.json
+*.txt
+*.csv
+*.wfp
+!requirements.txt
+!README.md
+!confidential.py.sample
