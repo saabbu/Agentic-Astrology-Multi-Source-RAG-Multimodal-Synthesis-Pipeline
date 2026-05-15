@@ -1,45 +1,51 @@
+# ==============================================================================
+# CONFIDENTIAL CONFIGURATION FOR AGENTIC ASTROLOGY PIPELINE
+# ==============================================================================
 
 # --- YouTube API Configuration ---
-# Used in: runYTTranscript.py
-yt_google_api_key = "YOUR APIKEY"
+yt_google_api_key = "YOUR_YOUTUBE_API_KEY"
+cookie_file_path = "youtube_cookies.txt"
+
+# Search Filters & Fallbacks
 yt_query = "(Guru Peyarchi | குரு பெயர்ச்சி) 2026 (Thulam | துலாம்)"
 transcript_length = 500
 date_time_lookout = 60
 language = ['ta']
 max_results = 10
-cookie_file_path = "youtube_cookies.txt"
-# --- Webshare Proxy Configuration ---
-# Used in: runYTTranscript.py
+
+# --- Webshare Proxy Configuration (Optional/Legacy) ---
 webshare_proxy_user_name = 'NOT USED'
 webshare_proxy_password = 'NOT USED'
 
-
 # --- HeyGen API Configuration ---
-# Used in: getavtarVideo.py
 heygen_api_key = "YOUR_HEYGEN_API_KEY"
 
-
 # --- Google Cloud TTS Configuration ---
-# Used in: getAudioCloud.py
-# Note: Ensure the 'google-tts-creds.json' file is in your project root
 google_application_credentials = "google-tts-creds.json"
 
-# --- Optional: Ollama/LLM Settings ---
-# Used in: getGemmaSummary.py
+# --- Ollama / Local LLM Settings ---
 ollama_url = "http://localhost:11434/api/generate"
 model_name = "gemma3:12b"
 options = {
-            "num_ctx": 16384,
-            "temperature": 0.8,  
-            "top_p": 0.9,
-            "presence_penalty": 0.6 
-            
-        }
+    "num_ctx": 16384,
+    "temperature": 0.8,  
+    "top_p": 0.9,
+    "presence_penalty": 0.6 
+}
 
+# --- Audio Engine Configurations (FFmpeg & Pydub) ---
+ffmpeg_path = r"C:\ffmpeg\bin"
+narration_lead_audio = "guru_peyarchi_2026_full.mp3"
+background_music_audio = "Raag Hamsadhwani - Sandeep Das, Mayank Raina, Bivakar Chaudhuri.mp3"
+final_output_file = "astrology_final_mix.mp3"
+bg_music_volume_db = -20
+
+# --- Legacy Fallback Variables (For running standalone scripts) ---
 rasi = "Thulam (துலாம்)"
 transit = "Guru Peyarchi (குரு பெயர்ச்சி)"
 greeting = "இனிய துலாம் ராசி அன்பர்களே!"
 
+# --- LLM Engine Prompts ---
 map_prompt = """Role: You are a professional Vedic Astrologer.
 Task: Extract every specific prediction and piece of advice for {rasi} during the {transit} from the provided transcript.
 
@@ -67,17 +73,119 @@ DIRECT ADDRESS: Start the response immediately with "{greeting}".
 Summaries to Synthesize:
 {combined_summaries}
 """
-        
 
-# confidential.py additions
-ffmpeg_path = r'Path to ffmpeg/bin'
-narration_lead_audio = "path_to_narration_file.mp3"
-background_music_audio = "path_to_background_music.mp3"
-final_output_file = "astrology_final_mix.mp3"
+# ==============================================================================
+# AUTOMATED ORCHESTRATION LOOP MATRIX (All 12 Moon Signs)
+# ==============================================================================
+SEARCH_CRITERIA_LIST = [
+    {
+        "slug": "mesham",
+        "query": "(Guru Peyarchi | குரு பெயர்ச்சி) 2026 (Mesham | மேஷம்)",
+        "rasi": "Mesham (மேஷம்)",
+        "transit": "Guru Peyarchi 2026",
+        "greeting": "இனிய மேஷ ராசி அன்பர்களே!"
+    },
+    {
+        "slug": "rishabam",
+        "query": "(Guru Peyarchi | குரு பெயர்ச்சி) 2026 (Rishabam | ரிஷபம்)",
+        "rasi": "Rishabam (ரிஷபம்)",
+        "transit": "Guru Peyarchi 2026",
+        "greeting": "இனிய ரிஷப ராசி அன்பர்களே!"
+    },
+    {
+        "slug": "mithunam",
+        "query": "(Guru Peyarchi | குரு பெயர்ச்சி) 2026 (Mithunam | மிதுனம்)",
+        "rasi": "Mithunam (மிதுனம்)",
+        "transit": "Guru Peyarchi 2026",
+        "greeting": "இனிய மிதுன ராசி அன்பர்களே!"
+    },
+    {
+        "slug": "kadagam",
+        "query": "(Guru Peyarchi | குரு பெயர்ச்சி) 2026 (Kadagam | கடகம்)",
+        "rasi": "Kadagam (கடகம்)",
+        "transit": "Guru Peyarchi 2026",
+        "greeting": "இனிய கடக ராசி அன்பர்களே!"
+    },
+    {
+        "slug": "simmam",
+        "query": "(Guru Peyarchi | குரு பெயர்ச்சி) 2026 (Simmam | சிம்மம்)",
+        "rasi": "Simmam (சிம்மம்)",
+        "transit": "Guru Peyarchi 2026",
+        "greeting": "இனிய சிம்ம ராசி அன்பர்களே!"
+    },
+    {
+        "slug": "kanni",
+        "query": "(Guru Peyarchi | குரு பெயர்ச்சி) 2026 (Kanni | கன்னி)",
+        "rasi": "Kanni (கன்னி)",
+        "transit": "Guru Peyarchi 2026",
+        "greeting": "இனிய கன்னி ராசி அன்பர்களே!"
+    },
+    {
+        "slug": "thulam",
+        "query": "(Guru Peyarchi | குரு பெயர்ச்சி) 2026 (Thulam | துலாம்)",
+        "rasi": "Thulam (துலாம்)",
+        "transit": "Guru Peyarchi 2026",
+        "greeting": "இனிய துலாம் ராசி அன்பர்களே!"
+    },
+    {
+        "slug": "viruchigam",
+        "query": "(Guru Peyarchi | குரு பெயர்ச்சி) 2026 (Viruchigam | விருச்சிகம்)",
+        "rasi": "Viruchigam (விருச்சிகம்)",
+        "transit": "Guru Peyarchi 2026",
+        "greeting": "இனிய விருச்சிக ராசி அன்பர்களே!"
+    },
+    {
+        "slug": "dhanusu",
+        "query": "(Guru Peyarchi | குரு பெயர்ச்சி) 2026 (Dhanusu | தனுசு)",
+        "rasi": "Dhanusu (தனுசு)",
+        "transit": "Guru Peyarchi 2026",
+        "greeting": "இனிய தனுசு ராசி அன்பர்களே!"
+    },
+    {
+        "slug": "magaram",
+        "query": "(Guru Peyarchi | குரு பெயர்ச்சி) 2026 (Magaram | மகரம்)",
+        "rasi": "Magaram (மகரம்)",
+        "transit": "Guru Peyarchi 2026",
+        "greeting": "இனிய மகர ராசி அன்பர்களே!"
+    },
+    {
+        "slug": "kumbam",
+        "query": "(Guru Peyarchi | குரு பெயர்ச்சி) 2026 (Kumbam | கும்பம்)",
+        "rasi": "Kumbam (கும்பம்)",
+        "transit": "Guru Peyarchi 2026",
+        "greeting": "இனிய கும்ப ராசி அன்பர்களே!"
+    },
+    {
+        "slug": "meenam",
+        "query": "(Guru Peyarchi | குரு பெயர்ச்சி) 2026 (Meenam | மீனம்)",
+        "rasi": "Meenam (மீனம்)",
+        "transit": "Guru Peyarchi 2026",
+        "greeting": "இனிய மீன ராசி அன்பர்களே!"
+    }
+]
 
-# Volume adjustment in dB (e.g., -20 means reducing background volume significantly)
-bg_music_volume_db = -20
+# --- Guardrail Judge Configuration ---
+judge_model_name = "qwen2.5:14b" # Or "gemini-1.5-flash" via API
 
+judge_prompt = """Role: You are a strict quality control automated auditor for a broadcast network.
+Task: Evaluate the provided Tamil script against critical production guardrails.
 
+Evaluation Rubric:
+1. Language Check: Is the entire text written in Tamil? (True/False)
+2. Heading Check: Does the script contain markdown headers (##, ***), itemized bullet points, or section tags like "Job:", "Business:", "Health:"? (True = Headings present, False = Clean narrative)
+3. Translation Check: Are there any English words or phrases wrapped in parentheses/brackets acting as translations? (True/False)
+4. Tone Check: Does the text contain spiritual or paternalistic words like "ஆசிகள்" (blessings), "பக்தர்கள்" (devotees), or act as a motivational life coach? (True/False)
 
+Output Format: You MUST respond with a raw JSON object matching this structure exactly. Do not wrap it in markdown block tags.
+{{
+    "all_tamil": true/false,
+    "has_headings_or_bullets": true/false,
+    "has_bracketed_translations": true/false,
+    "is_spiritual_or_preachy": true/false,
+    "compliance_passed": true/false,
+    "failures": ["List specific violations found, or leave empty if passed"]
+}}
 
+Script to Audit:
+{generated_script}
+"""

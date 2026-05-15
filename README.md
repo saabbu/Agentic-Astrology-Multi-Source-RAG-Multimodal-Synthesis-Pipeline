@@ -1,71 +1,31 @@
-Agentic Astrology: Multi-Source RAG & Multimodal Synthesis Pipeline
-An automated end-to-end pipeline that extracts Vedic astrology forecasts from diverse YouTube sources, synthesizes them using a local LLM (Gemma 3), and generates high-fidelity multimodal outputs including Chirp3-HD audio and AI avatar videos.
+# Agentic Astrology: Multi-Sign Automated Loop Engine & Multimodal Synthesis Pipeline
 
-🚀 The Pipeline Architecture
-The system operates as a five-stage agentic workflow:
+An automated, end-to-end production pipeline that extracts Vedic astrology forecast data from multiple YouTube channels, processes it through a local Map-Reduce synthesis engine with an autonomous self-healing critique layer, and outputs high-fidelity multimodal assets (Google Chirp3-HD audio and lip-synced HeyGen digital avatar videos) sequentially across all 12 moon signs.
 
-Context Extraction: Scrapes Tamil/English transcripts from top-performing YouTube astrology channels using the YouTube Data API and youtube-transcript-api with session-handling for robust retrieval.
+## 🚀 Pipeline Architecture
 
-Map-Reduce Synthesis: * Map Stage: A local Gemma 3:12b model (via Ollama) extracts specific predictions (Health, Career, Remedies) from each source.
+The engine operates via a centralized orchestration loop executed sequentially for every sign defined in the execution matrix:
 
-Reduce Stage: The model synthesizes disparate viewpoints into a single, cohesive narrative in high-quality Tamil.
+1. **Workspace Folder Segregation & Path Isolation:** To prevent file cross-over and synchronization data overwrites during loop steps, the system dynamically maps and isolates intermediate workspace components into `/transcripts` and `/outputs` folders based on distinct string slugs (e.g., `transcripts_mesham.json`).
+2. **Context Extraction Loop:** Scrapes Tamil/English transcripts using the YouTube Data API v3 and `youtube-transcript-api` via session-handling cookies to bypass bot-detection rate limits. It dynamically targets queries built from English and Tamil keyword matrices.
+3. **Map-Reduce Synthesis (Gemma 3:12b):**
+   * **Map Stage:** Extracts localized prediction data (Job, Business, Health, Family, Education, Remedies) from each collected video source.
+   * **Reduce Stage:** Synthesizes competing and overlapping viewpoints into a structured broadcast script composed of exactly 6 sequential paragraphs to maintain topical grouping.
+4. **Autonomous Critique-Correction (Self-Healing Loop):** To fix formatting anomalies like markdown text headers, parenthetical dual-language translations, or tone leakage (e.g., spiritual guru postures) before paying for cloud APIs, the narrative is routed through an autonomous evaluation loop. The system checks syntax, tracks errors via a numeric Defect Score, executes up to 3 editing recycles, and systematically caches the historically optimal state to prevent empty outputs or structural degradation due to local context drift.
+5. **High-Fidelity Vocal Synthesis:** Passes the clean narrative script to the Google Cloud Text-to-Speech API using the native `ta-IN-Chirp3-HD-Achird` model.
+6. **Audio Engineering Layer:** Uses FFmpeg and `pydub` to adjust volume metrics, loop background tracks (e.g., Raag Hamsadhwani), and overlay voiceovers over continuous musical compositions.
+7. **Digital Avatar Production:** Transmits mixed audio tracks to the HeyGen API v2 endpoints to queue, poll, and log lipsynced avatar presentations.
 
-High-Fidelity TTS: Utilizes Google Cloud Text-to-Speech (Chirp3-HD) to generate natural, expressive Tamil narration.
+## 📂 Repository Structure
 
-Audio Engineering: Automatically layers the narration over traditional background scores (e.g., Raag Hamsadhwani) using FFmpeg and pydub, with automated ducking and looping logic.
-
-Digital Avatar Generation: Integrates with the HeyGen API to render a lip-synced digital avatar presenting the final forecast.
-
-🛠️ Tech Stack
-Language: Python 3.10+
-
-LLM: Gemma 3:12b (Ollama)
-
-Cloud Services: Google Cloud (TTS), YouTube Data API v3, HeyGen API
-
-Media Processing: FFmpeg, Pydub
-
-Data Handling: Pandas, JSON
-
-📂 Repository Structure
-Plaintext
-├── runYTTranscript.py      # Multi-source transcript scraper
-├── getGemmaSummary.py      # Map-Reduce LLM synthesis logic
-├── getAudioCloud.py        # Google Chirp3-HD synthesis
-├── mixAudio.py             # FFmpeg-based audio mixing engine
-├── getavtarVideo.py        # HeyGen avatar orchestration
-├── confidential.py.sample  # Configuration template
-└── requirements.txt        # Dependency manifest
-⚙️ Setup & Installation
-Clone the repository:
-
-Bash
-git clone https://github.com/saabbu/Agentic-Astrology-Multi-Source-RAG-Multimodal-Synthesis-Pipeline.git
-cd agentic-astrology
-Install Dependencies:
-
-Bash
-pip install -r requirements.txt
-Install FFmpeg:
-Ensure FFmpeg is installed on your system and the bin folder is added to your System PATH to enable audio mixing capabilities.
-
-Configuration:
-
-Rename confidential.py.sample to confidential.py.
-
-Input your API keys for YouTube, Google Cloud, and HeyGen.
-
-Place your Google Cloud service account JSON in the root directory.
-
-🛠️ Usage
-Run the pipeline sequentially or import modules into a controller script:
-
-Bash
-python runYTTranscript.py  # Fetch transcripts
-python getGemmaSummary.py  # Synthesize narrative
-python getAudioCloud.py    # Generate HD Audio
-python mixAudio.py         # Mix with background score
-🛡️ Security
-This project uses a strict .gitignore and confidential.py architecture to ensure no API keys, session cookies, or personal credentials are ever committed to version control.
-
-Developed as a technical exploration of Agentic RAG and Multimodal AI integration.
+```plaintext
+├── transcripts/            # Created automatically; holds raw scraped JSON transcripts
+├── outputs/                # Created automatically; holds text narratives, voice tracks, and mixed media
+├── orchestrator.py         # Main loop controller driving the end-to-end sequential pipeline
+├── runYTTranscript.py      # Modular scrapper handling cookie loading and search parameters
+├── getGemmaSummary.py      # Map-Reduce engine with internal critique loops and state caching
+├── getAudioCloud.py        # Google Cloud TTS Chirp3-HD chunking and synthesis engine
+├── mixAudio.py             # Audio engineering module interfacing with system FFmpeg tools
+├── getavtarVideo.py        # HeyGen API video instantiation and status polling wrapper
+├── confidential.py.sample  # Centralized template for API credentials, prompts, and sign matrix
+└── requirements.txt        # Python dependency manifest

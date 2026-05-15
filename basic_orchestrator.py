@@ -32,32 +32,32 @@ def run_pipeline():
         lead_audio_output = os.path.join("outputs", f"lead_{slug}.mp3")
         final_mixed_audio = os.path.join("outputs", f"astrology_mix_{slug}.mp3")
         
-        # # Step 1: Automated Transcript Scraping
-        # print(f"[1/5] Extracting source transcripts -> {json_output}")
-        # if (not skip_scraping):
-        #     video_ids = get_latest_videos(query)
-        #     if not video_ids:
-        #         print(f"Skipping {slug}: No target videos resolved by YouTube Data API.")
-        #         continue
-        #     pipeline_to_json_with_cookies(video_ids, output_file=json_output)
+        # Step 1: Automated Transcript Scraping
+        print(f"[1/5] Extracting source transcripts -> {json_output}")
+        if (not skip_scraping):
+            video_ids = get_latest_videos(query)
+            if not video_ids:
+                print(f"Skipping {slug}: No target videos resolved by YouTube Data API.")
+                continue
+            pipeline_to_json_with_cookies(video_ids, output_file=json_output)
         
-        # # Step 2: Synthesis and Multi-Turn Compliance Audit
-        # print(f"[2/5] Synthesizing consensus and running self-healing auditor loop...")
-        # # Catches the definitive pass/fail boolean from getGemmaSummary
-        # pipeline_viable = iterative_summary_pipeline(
-        #     json_file=json_output, 
-        #     output_txt=narrative_output,
-        #     rasi=rasi,
-        #     transit=transit,
-        #     greeting=greeting
-        # )
+        # Step 2: Synthesis and Multi-Turn Compliance Audit
+        print(f"[2/5] Synthesizing consensus and running self-healing auditor loop...")
+        # Catches the definitive pass/fail boolean from getGemmaSummary
+        pipeline_viable = iterative_summary_pipeline(
+            json_file=json_output, 
+            output_txt=narrative_output,
+            rasi=rasi,
+            transit=transit,
+            greeting=greeting
+        )
         
-        # # Circuit Breaker: Halt only if no viable narrative could be generated or saved
-        # if not pipeline_viable:
-        #     print(f"CRITICAL ERROR: {slug.upper()} processing failed. Halting chain to preserve downstream API budget.")
-        #     continue
+        # Circuit Breaker: Halt only if no viable narrative could be generated or saved
+        if not pipeline_viable:
+            print(f"CRITICAL ERROR: {slug.upper()} processing failed. Halting chain to preserve downstream API budget.")
+            continue
             
-        # print(f"PROCEEDING: Viable narrative file locked for {slug.upper()}. Commencing asset generation.")
+        print(f"PROCEEDING: Viable narrative file locked for {slug.upper()}. Commencing asset generation.")
         
         # Step 3: Vocal Track Rendering (Google Cloud TTS Call)
         print(f"[3/5] Requesting Google Cloud Chirp3-HD synthesis -> {lead_audio_output}")
