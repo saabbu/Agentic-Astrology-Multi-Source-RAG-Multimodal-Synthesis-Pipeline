@@ -3,8 +3,9 @@ google-api-python-client==2.196.0
 youtube-transcript-api==1.2.4
 pandas==3.0.2
 
-# LLM & API Integration (HeyGen, Ollama)
+# LLM & API Integration (HeyGen, Ollama, Agentic Graphs)
 requests==2.33.1
+langgraph==1.2.0
 
 # Speech Synthesis (Google Cloud & gTTS)
 google-cloud-texttospeech==2.36.0
@@ -16,4 +17,3 @@ pydub==0.25.1
 # Infrastructure & Utilities
 google-auth==2.52.0
 python-dateutil==2.9.0.post0
-

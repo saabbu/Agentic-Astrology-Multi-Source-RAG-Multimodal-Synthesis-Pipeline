@@ -45,34 +45,41 @@ rasi = "Thulam (துலாம்)"
 transit = "Guru Peyarchi (குரு பெயர்ச்சி)"
 greeting = "இனிய துலாம் ராசி அன்பர்களே!"
 
-# --- LLM Engine Prompts ---
-map_prompt = """Role: You are a professional Vedic Astrologer.
-Task: Extract every specific prediction and piece of advice for {rasi} during the {transit} from the provided transcript.
 
-Constraint: Do not provide a summary of the video. Do not use phrases like "The speaker says" or "The transcript mentions." Provide the output as direct astrological predictions.
+#---LLM Engine Prompts---
+map_prompt = """Role: You are a silent data extraction API. Do not converse or introduce your response.
+Task: Extract specific predictions, practical warnings, and conditional risks for {rasi} during the {transit} from the provided text.
 
-Structure the output into these categories:
-Job (உத்தியோகம்)
-Business (தொழில்)
-Health (ஆரோக்கியம்)
-Love (காதல்)
-Marriage (திருமணம்)
-Parents Health (பெற்றோர் ஆரோக்கியம்)
-Kids Education (குழந்தைகள் கல்வி)
-Remedies (பரிகாரங்கள்)
+Strict Output Rules:
+1. Organize the raw extracted data exclusively under the six index groups below.
+2. Do not write introductory text, conclusions, or meta-commentary.
+3. If no data exists for a category, leave it blank.
+
+- Job
+- Business
+- Health
+- Family
+- Education
+- Remedies
 
 Transcript: {transcript}
 """
 
-reduce_prompt = """Role: You are a traditional and highly respected Tamil Astrologer speaking directly to your devotees.
-Task: Synthesize the provided forecast summaries into a single, cohesive, and authoritative {transit} narrative for {rasi}.
+reduce_prompt = """Role: You are an objective broadcast reader compiling a structured transit report.
+Task: Synthesize the provided data into a cohesive broadcast script for {rasi} during the {transit}.
 
-Language Constraint: You must write the ENTIRE response in high-quality, narrative Tamil.
-DIRECT ADDRESS: Start the response immediately with "{greeting}".
+Linguistic and Structural Constraints:
+1. Write the ENTIRE script in clear, narrative Tamil.
+2. DIRECT ADDRESS START: Begin the response exactly with this phrase and nothing else: "{greeting}"
+3. TOPICAL GROUPING: You must structure the script into exactly 6 sequential paragraphs, corresponding to these topics in order: Job, Business, Health, Family, Education, and Remedies.
+4. NO LABELS: Each paragraph must start directly with the astrological forecast content. Do NOT include paragraph titles, markdown markers (##, **), or prefix text labels like "உத்தியோகம்:", "தொழில்:", or "Job:".
+5. NO SPIRITUALITY: Strictly omit any motivational padding, life-coaching, or phrases like "ஆசிகள்" (blessings).
+6. ZERO META-COMMENTARY: Do NOT wrap the output in markdown code blocks (```). Do not include introductions, explanations, notes, or English characters. Output only the raw Tamil script payload.
 
 Summaries to Synthesize:
 {combined_summaries}
 """
+
 
 # ==============================================================================
 # AUTOMATED ORCHESTRATION LOOP MATRIX (All 12 Moon Signs)
@@ -165,27 +172,47 @@ SEARCH_CRITERIA_LIST = [
 ]
 
 # --- Guardrail Judge Configuration ---
-judge_model_name = "qwen2.5:14b" # Or "gemini-1.5-flash" via API
+# judge_model_name = "qwen2.5:14b" # Or "gemini-1.5-flash" via API
+judge_model_name = "gemma3:12b" # Or "gemini-1.5-flash" via API
+judge_prompt = """Role: You are an automated, silent syntax parsing API. You do not explain, converse, or write text reports.
+Task: Evaluate the provided script against binary structural indicators and return a strict JSON payload.
 
-judge_prompt = """Role: You are a strict quality control automated auditor for a broadcast network.
-Task: Evaluate the provided Tamil script against critical production guardrails.
+Operational Definitions for Metrics:
+1. "has_headings_or_labels": True if the text contains markdown characters (**, #, ##), dashes, or words immediately followed by a colon (e.g., "தொழில்:", "உத்தியோகம்:"). Otherwise False.
+2. "has_bracketed_translations": True if there are any English characters, English words, or parentheses containing matching terms. Otherwise False.
+3. "is_spiritual_or_preachy": True if the text contains terms like "ஆசிகள்", religious references, or life-coaching language. Otherwise False.
+4. "compliance_passed": True ONLY if all three variables above are False AND the text is written purely in clean Tamil. Otherwise False.
 
-Evaluation Rubric:
-1. Language Check: Is the entire text written in Tamil? (True/False)
-2. Heading Check: Does the script contain markdown headers (##, ***), itemized bullet points, or section tags like "Job:", "Business:", "Health:"? (True = Headings present, False = Clean narrative)
-3. Translation Check: Are there any English words or phrases wrapped in parentheses/brackets acting as translations? (True/False)
-4. Tone Check: Does the text contain spiritual or paternalistic words like "ஆசிகள்" (blessings), "பக்தர்கள்" (devotees), or act as a motivational life coach? (True/False)
+Output Constraint:
+Return ONLY a valid JSON object matching the schema below. 
+- Do NOT wrap the output in markdown code block markers (```json ... ```).
+- Do NOT include introductions, summaries, rewritten script drafts, explanations, or notes.
+- Your entire output must begin with '{{' and end with '}}'.
 
-Output Format: You MUST respond with a raw JSON object matching this structure exactly. Do not wrap it in markdown block tags.
 {{
-    "all_tamil": true/false,
-    "has_headings_or_bullets": true/false,
+    "compliance_passed": true/false,
+    "has_headings_or_labels": true/false,
     "has_bracketed_translations": true/false,
     "is_spiritual_or_preachy": true/false,
-    "compliance_passed": true/false,
-    "failures": ["List specific violations found, or leave empty if passed"]
+    "failures": ["List only short string descriptions of the exact text strings that caused a violation, or leave empty if completely compliant"]
 }}
 
 Script to Audit:
 {generated_script}
+"""
+
+correction_prompt = """Role: You are an automated text-cleaning utility working exclusively in the Tamil language.
+Task: Transform the provided text by stripping the specified formatting and structural violations.
+
+Violations to Completely Strip:
+{failures_str}
+
+Strict Transformation Rules:
+1. Maintain exactly 6 independent paragraphs corresponding to the topical sequence (Job, Business, Health, Family, Education, Remedies). Do not alter the paragraph count or merge them.
+2. Strip out all English words, bracketed translations, structural headings, colons, asterisks, and spiritual phrases.
+3. CRITICAL: Do NOT include any English commentary, conversational prefaces, notes, or introductions (e.g., do not write "Here is the clean text:" or "Revisions made:").
+4. ZERO ENGLISH: The entire output payload must contain absolutely ZERO English characters and zero markdown code fences. Return ONLY the final raw Tamil script.
+
+Text to Clean:
+{current_script}
 """
